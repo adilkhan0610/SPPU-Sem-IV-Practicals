@@ -1,0 +1,86 @@
+#include <iostream> 
+#include <stack> 
+using namespace std;
+
+// Structure for a Node
+struct Node
+{
+char data;
+Node *left, *right;
+
+Node(char val) 
+{ data = val;
+left = right = nullptr;
+}
+};
+
+// Function to traverse the tree in postorder
+void postOrder(Node* root)
+{
+if (root == nullptr)
+{ return;
+}
+postOrder(root->left); 
+postOrder(root->right); 
+cout << root->data << " ";
+}
+
+
+// Function to construct a binary tree from a given prefix expression
+Node* constructTreeFromPrefix(string prefix)
+{
+stack<Node*> st;
+int p= prefix.length();
+
+for (int i = p- 1; i >= 0; i--)
+{
+Node* newNode = new Node(prefix[i]);
+
+// If operator, pop two nodes and attach them as children
+if (prefix[i] == '+'|| prefix[i] == '-'|| prefix[i] == '*' || prefix[i]== '/')
+{
+if (!st.empty())
+{ newNode->left = st.top(); 
+st.pop();
+}
+ 
+if (!st.empty())
+{ newNode->right = st.top(); 
+st.pop();
+}
+}
+st.push(newNode);
+}
+return st.empty() ? nullptr : st.top();
+}
+
+// Function to insert a node in the binary tree
+Node* insert(Node* root, char data)
+{
+if (root == nullptr) 
+return new Node(data);
+
+if (data < root->data)
+root->left = insert(root->left, data);
+
+else
+root->right = insert(root->right, data); 
+return root;
+
+}
+
+int main()
+{
+string prefix;
+cout << "Enter prefix expression: "; 
+cin >> prefix;
+
+Node* root = constructTreeFromPrefix(prefix);
+
+cout << "Postorder Traversal of Constructed Tree: "; 
+postOrder(root);
+cout << endl; 
+return 0;
+}
+ 
+
