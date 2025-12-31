@@ -1,0 +1,106 @@
+def create_set():
+  print("Enter a word to create a set:") 
+  str_input= input()
+  s=[]
+  for char in str_input:
+    if char not in s:
+      s.append(char)
+  return s
+
+def intersection(s1,s2): 
+  final=[]
+  for element in s1:
+    if element in s2 and element not in final: 
+      final.append(element)
+    return final
+
+def union(s1,s2):
+  final=s1[:]
+  for element in s2:
+    if element not in final:
+      final.append(element)
+    return final
+
+def difference(s1,s2): 
+  final=[]
+  for element in s1:
+    if element not in s2:
+      final.append(element)
+    return final
+
+def isSubsetOf(s1,s2):
+  for element in s2:
+    if element not in s1:
+    return False
+  return True
+
+choice=0
+print("Create a set A:") 
+s1=create_set() 
+
+print("\nSet A=", s1)
+while choice !=9:
+print("\n\n********* MENU *********") 
+print(" 1. Add Element ")
+print(" 2. Remove Element ") 
+print(" 3. Contains Element ")
+print(" 4. Size Of Set ")
+print(" 5. Intersection Of Sets ") 
+print(" 6. Union Of Sets ") 
+print(" 7. Difference Of Sets ") 
+print(" 8. Subset ")
+print(" 9. Exit ")
+choice = int(input("\nEnter Your Choice:")) 
+
+if choice==1:
+  a=input("\n enter the element to be added:") 
+  if a not in s1:
+    s1.append(a)
+    print("\n Element added sucessfully!\n Set A=", s1)
+
+elif choice==2:
+  a=input("\nEnter the element to be removed: ") 
+  if a in s1:
+    s1.remove(a)
+    print("\n Element removed successfully!\n Set A=", s1)
+
+elif choice==3:
+  a=input("\nEnter the element to be searched :") 
+  if a in s1:
+    print(a, "is present in the Set.")
+  else:
+    print(a, "is not present in the Set.")
+
+elif choice==4:
+  print("\nThe current size of the Set is" , len(s1))
+
+elif choice==5:
+  print("Create a Set B:") 
+  s2= create_set()
+  print("The intersection of\n Set A =", s1, "\n and \n Set B=",s2,":\n", intersection(s1,s2))
+
+elif choice==6:
+  print("Create a Set B:") 
+  s2= create_set()
+  print("The union of\n Set A =", s1, "\n and \n Set B=",s2,":\n", union(s1,s2))
+
+elif choice==7:
+  print("Create a Set B:") 
+  s2= create_set()
+  print("The difference of\n Set A =", s1, "\n and \n Set B=",s2,":\n", difference(s1,s2))
+ 
+elif choice==8:
+  print("Create a Set B for checking the subset:") 
+  s2=create_set()
+  if isSubsetOf(s1,s2):
+    print("Yess!! \n Set B=" , s2, "is a subset of Set A=", s1)
+  else:
+    print("Noo!! \n Set B=", s2, "is not a subset of Set A=", s1)
+
+elif choice==9:
+  break
+
+else:
+  print("Invalid Choice!!")
+ 
+
