@@ -1,0 +1,113 @@
+;Write 64 bit ALP to convert 4-digit Hex number into its equivalent BCD number and
+;5-digit BCD number into its equivalent HEX number. 
+;Make your program user friendly to accept the choice from user for: (a) HEX to BCD 
+;b) BCD to HEX (c) EXIT. Display proper strings to prompt the user while accepting the input 
+;and displaying the result. (use of 64-bitregisters is expected)
+
+section .data
+  m1 db	10,"Enter 4-digit Hex number: " 
+  l1 equ	$- m1
+  m2 db 10,"Equivalent BCD number is: " 
+  l2 equ	$- m2
+  emsg db 10,"You entered Invalid Data!!!", 
+  l3 equ	$-emsg
+
+
+section .bss
+  buf	resb	6
+  buf_len:	equ	$-buf
+  digitcount	resb	1
+  ans	resw	1
+  char_ans	resb	4
+
+;macros as per 64-bit convensions
+
+%macro print	2
+  mov	rax,1	
+  mov	rdi,1	
+  mov	rsi,%1	
+  mov	rdx,%2	
+  syscall	
+%endmacro
+
+%macro read	2
+  mov	rax,0	
+  mov	rdi,0	
+  mov	rsi,%1	
+  mov	rdx,%2	
+  syscall	
+%endmacro
+
+%macro exit 0
+  mov rax, 60	
+  mov rdi,0	
+  syscall	
+%endmacro
+
+
+section .text
+  global _start
+ _start:
+    print m1,l1
+    call	accept_num 
+    mov	ax,bx
+    mov	rbx,10 
+
+back:
+print m1,l1
+call	accept_num 
+mov	ax,bx
+mov	rbx,10 xor	rdx,rdx
+div	rbx
+
+push dx	
+inc	byte[digitcount]
+
+cmp	rax,0h	
+jne	back
+
+print m2, l2
+ 
+
+print_bcd:
+pop	dx
+add	dl,30h	
+mov	[char_ans],dl	
+print char_ans,1	
+dec	byte[digitcount]
+jnz	print_bcd
+
+exit
+;
+accept_num:
+read	buf,5	
+xor mov mov
+next_digit:
+shl mov	bx,bx rcx,4 rsi,buf
+
+bx,04 al,[rsi]	
+cmp	al,"0"
+ 
+
+jb cmp jbe	error al,"9" sub30	
+cmp	al,"A"
+jb cmp jbe	error al,"F" sub37
+cmp	al,"a"
+jb cmp
+jbe	error al,"f"
+sub57
+
+error: print emsg, l3	
+exit
+sub57:	sub	al,57h	
+jmp next
+sub37: sub	al,37h	
+jmp next
+sub30: sub	al,30h	
+
+next: add	bx,ax
+inc	rsi
+loop	next_digit	
+ret
+ 
+
